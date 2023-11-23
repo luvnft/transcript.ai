@@ -30,10 +30,7 @@ function handleSubmit(req, res) {
         const { link } = req.body;
         if (!link)
             res.status(500).send("Link not provided!");
-<<<<<<< HEAD
-=======
         console.log("Received link: ", link);
->>>>>>> 7ad1693813fd5a461c5ad840193fcbe678f4e77b
         try {
             const result = yield (0, transcribe_1.transcribe)(link);
             console.log("result.text", result.text);
