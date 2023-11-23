@@ -19,9 +19,18 @@ const storage_1 = require("@google-cloud/storage");
 const uuid_1 = require("uuid");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+<<<<<<< HEAD
 const storage = new storage_1.Storage({
     credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS || ''),
 });
+=======
+//// TESTING
+const storage = new storage_1.Storage({});
+/// PROD
+// const storage = new Storage({
+//     credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS || "")
+// });
+>>>>>>> 7ad1693813fd5a461c5ad840193fcbe678f4e77b
 function processVideoSieve(file) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -35,10 +44,17 @@ function processVideoSieve(file) {
                 inputs: {
                     file: { url: fileUrl },
                     generate_chapters: true,
+<<<<<<< HEAD
                     max_summary_length: 20,
                     max_title_length: 10,
                     num_tags: 5,
                 },
+=======
+                    max_summary_length: 10,
+                    max_title_length: 8,
+                    num_tags: 5
+                }
+>>>>>>> 7ad1693813fd5a461c5ad840193fcbe678f4e77b
             }, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,11 +73,12 @@ exports.processVideoSieve = processVideoSieve;
 function fetchSieveData(jobId) {
     return __awaiter(this, void 0, void 0, function* () {
         const checkInterval = 5000;
-        const timeout = 60000;
         try {
             let jobData;
             let status = 'processing';
             while (status === 'processing') {
+                if (status !== "processing")
+                    break;
                 const response = yield axios_1.default.get(`https://mango.sievedata.com/v2/jobs/${jobId}`, {
                     headers: {
                         'X-API-Key': process.env.SIEVE_API_KEY || '',
@@ -69,6 +86,7 @@ function fetchSieveData(jobId) {
                 });
                 jobData = response.data;
                 status = jobData.status;
+<<<<<<< HEAD
                 if (status === 'processing') {
                     console.log('Job processing, waiting for completion...');
                     yield new Promise((resolve) => setTimeout(resolve, checkInterval));
@@ -76,6 +94,10 @@ function fetchSieveData(jobId) {
                 else {
                     break;
                 }
+=======
+                console.log('Job processing, waiting for completion...');
+                yield new Promise(resolve => setTimeout(resolve, checkInterval));
+>>>>>>> 7ad1693813fd5a461c5ad840193fcbe678f4e77b
             }
             console.log('Job completed. Fetching output data...');
             console.log('jobData.outputs', jobData.outputs);
@@ -94,7 +116,7 @@ function uploadToCloudStorage(fileContent, bucketName, fileName) {
             const file = bucket.file(fileName);
             const stream = file.createWriteStream({
                 metadata: {
-                    contentType: 'video/mp4',
+                    contentType: 'video/mp4', // maybe change to mp3 ??? 
                 },
             });
             stream.end(fileContent);
