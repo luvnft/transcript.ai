@@ -32,10 +32,11 @@ function handleSubmit(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { link } = req.body;
         if (!link)
-            throw new Error("No link provided");
+            res.status(500).send("Link not provided!");
         try {
-            const { text, summary, title, tags, chapters } = yield (0, transcribe_1.transcribe)(link);
-            res.send({ text, summary, title, tags, chapters });
+            const result = yield (0, transcribe_1.transcribe)(link);
+            console.log("result.text", result.text);
+            res.send(result);
         }
         catch (error) {
             console.error('Error in processing the request:', error);
